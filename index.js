@@ -6,7 +6,7 @@ const speakeasy = require("speakeasy");
 var QRCode = require('qrcode');
 const MongoClient = require('mongodb').MongoClient;
 const cors = require('cors');
-// const session = require('express-session');
+const session = require('express-session');
 
 const app = express();
 
@@ -50,12 +50,12 @@ app.use(
     preflightContinue: false,
   })
 );
-// app.use(session({
-//   secret: 'my-secret-key',
-//   resave: false,
-//   saveUninitialized: true,
-//   cookie: { secure: false }
-// }));
+app.use(session({
+  secret: 'my-secret-key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
 app.get("/api", (req, res) => {
   res.json({ message: "Welcome to the two factor authentication exmaple" })
 });
@@ -124,7 +124,7 @@ app.post("/api/validate", (req, res) => {
       }
       else {
         res.json(user)
-        if (tokenValidates) {
+        if (user) {
           res.json({ validated: true })
         } else {
           res.json({ validated: false })
